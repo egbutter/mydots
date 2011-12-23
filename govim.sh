@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 #kudos sontek https://github.com/sontek/dotfiles.git
+
+# if cygwin, replace $HOME=/home/username use /cygdrive/c/vim/
+# _vimrc -> /cygdrive/c/vim/_vimrc  
+# _vim -> /cygdrive/c/vim/vimfiles
+# if cygwin, do not forget d2u to run scripts
+
+
 function link_file {
     source="${PWD}/$1"
     target="${HOME}/${1/_/.}"

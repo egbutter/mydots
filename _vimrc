@@ -46,3 +46,6 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
 EOF
+"check if nix or dos then :set ff=unix and :set ff=dos
+"what's up with the weird commands like sift+control+v block visual instead of
+"control v?  get this fixed FIXME
