@@ -13,7 +13,7 @@ If (!$vimpath) { Throw "Please add vim73 to your \$PATH" }
 
 function LinkFile ([string]$tolink) {
 
-    $source="$($PWD)/$(tolink)"
+    $source="$($PWD)\$($tolink)"
     If ($tolink -eq "_vim") { 
         $target="$($vimpath)\$($tolink)files"  # peculiar win32 gvim inconsistency
     } Else {
@@ -22,23 +22,36 @@ function LinkFile ([string]$tolink) {
 
     If (Test-Path $target ) { move $target $target".bak" }
 
-    mklink /D $target $source
+    If ( (Get-Item ".\_vim") -is [System.IO.DirectoryInfo] ) {
+        $symopt = "/D"
+    } Else {
+        $symopt = ""
+    }
+    
+    echo "mklink $($symopt) $($target) $($source)"
+    cmd /c mklink $symopt $target $source
 }
 
-If ( ( $args[0] -eq "vim" ) {
-    For ( $i in _vim* ) {
-        link_file $i
-    }
-} 
+If ( $args[0] -eq "vim" ) {
+    $targetregex = "^_vim.*"
+} Else {
+    $targetregex = "^_.*"
+}
+
+Switch -regex ( Dir ) {
+    "$($targetregex)" { LinkFile $_.name }
+}
 
 # setup git submodules
-git.cmd submodule sync
-git.cmd submodule init
-git.cmd submodule update
-git.cmd submodule foreach git pull origin master
-git.cmd submodule foreach git submodule init
-git.cmd submodule foreach git submodule update
+cd _vim
+git submodule sync
+git submodule init
+git submodule update
+git submodule foreach git pull origin master
+git submodule foreach git submodule init
+git submodule foreach git submodule update
 
 # setup command-t
-cd _vim/bundle/command-t
+cd bundle/command-t
 rake make
+cd ../../..

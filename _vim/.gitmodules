@@ -1,27 +1,27 @@
-[submodule "bundle/snipmate"]
-	path = bundle/snipmate
+[submodule "bundle\\snipmate"]
+	path = bundle\\snipmate
 	url = https://github.com/msanders/snipmate.vim.git
-[submodule "bundle/tasklist"]
-	path = bundle/tasklist
+[submodule "bundle\\tasklist"]
+	path = bundle\\tasklist
 	url = https://github.com/vim-scripts/TaskList.vim.git
-[submodule "bundle/gundo"]
-	path = bundle/gundo
+[submodule "bundle\\gundo"]
+	path = bundle\\gundo
 	url = https://github.com/sjl/gundo.vim.git
-[submodule "bundle/pep8"]
-	path = bundle/pep8
+[submodule "bundle\\pep8"]
+	path = bundle\\pep8
 	url = https://github.com/vim-scripts/pep8.git
-[submodule "bundle/pyflakes"]
-	path = bundle/pyflakes
+[submodule "bundle\\pyflakes"]
+	path = bundle\\pyflakes
 	url = https://github.com/mitechie/pyflakes-pathogen.git
-[submodule "bundle/command-t"]
-	path = bundle/command-t
+[submodule "bundle\\command-t"]
+	path = bundle\\command-t
 	url = https://github.com/wincent/Command-T.git
-[submodule "bundle/minibufexpl"]
-	path = bundle/minibufexpl
+[submodule "bundle\\minibufexpl"]
+	path = bundle\\minibufexpl
 	url = https://github.com/sontek/minibufexpl.vim.git
-[submodule "bundle/supertab"]
-	path = bundle/supertab
+[submodule "bundle\\supertab"]
+	path = bundle\\supertab
 	url = https://github.com/ervandew/supertab.git
-[submodule "bundle/vim-slime"]
-	path = bundle/vim-slime
+[submodule "bundle\\vim-slime"]
+	path = bundle\\vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
