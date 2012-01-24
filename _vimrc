@@ -32,6 +32,7 @@ map <leader>todo <Plug>TaskList
 map <leader>undo :GundoToggle<CR>
 let g:pyflakes_use_quickfix = 0
 let g:pep8_map='<leader>pep8'
+let g:slime_target = "screen"
 au FileType python set omnifunc=pythoncomplete#Complete "tab completion 
 let g:SuperTabDefaultCompletionType="context"
 set completeopt=menuone,longest,preview "python documentation on pw
@@ -46,6 +47,7 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
 EOF
+set ff=unix
 "check if nix or dos then :set ff=unix and :set ff=dos
 "what's up with the weird commands like sift+control+v block visual instead of
 "control v?  get this fixed FIXME

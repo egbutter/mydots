@@ -1,0 +1,21 @@
+Config { font = "-*-profont-*-*-*-*-11-*-*-*-*-*-*-*"
+
+      , commands = [ Run Weather "CYKF" ["-t","YKF: <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
+                   , Run Weather "CYYZ" ["-t","YYZ: <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
+                   , Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                   , Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                   , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+                   , Run Memory ["-t","Mem: <usedratio>%"] 10
+                   , Run Swap [] 10
+                   , Run Com "uname" ["-s","-r"] "" 36000
+                   , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                   , Run StdinReader
+                   , Run Battery ["-L","50","-H","75","--high","green","--normal","yellow", "--low", "red"] 10
+                   , Run Mail [("gmail",".mail/gmail/INBOX")
+                              ,("engmail",".mail/engmail/INBOX")
+                              ,("xmonad",".mail/gmail/lists.xmonad")
+                              ,("arch-haskell",".mail/gmail/lists.arch-haskell")
+                              ,("arch-announce",".mail/gmail/lists.arch-announce")]
+                   ]
+      , template = "%StdinReader% }{ <fc=#ff0000>%Mail%</fc> %cpu% | %memory% | %wlan0% | <fc=#ee9a00>%date%</fc> | %CYKF% | %battery% "
+      }
