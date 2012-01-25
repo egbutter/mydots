@@ -1,0 +1,39 @@
+[submodule "_vim/bundle/autoclose"]
+	path = _vim/bundle/autoclose
+	url = https://github.com/Townk/vim-autoclose.git
+[submodule "_vim/bundle/command-t"]
+	path = _vim/bundle/command-t
+	url = https://github.com/wincent/Command-T.git
+[submodule "_vim/bundle/gundo"]
+	path = _vim/bundle/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "_vim/bundle/minibufexpl"]
+	path = _vim/bundle/minibufexpl
+	url = https://github.com/fholgado/minibufexpl.vim.git
+[submodule "_vim/bundle/pep8"]
+	path = _vim/bundle/pep8
+	url = https://github.com/jcrocholl/pep8.git
+[submodule "_vim/bundle/tasklist"]
+	path = _vim/bundle/tasklist
+	url = https://github.com/vim-scripts/TaskList.vim.git
+[submodule "_vim/bundle/pyflakes"]
+	path = _vim/bundle/pyflakes
+	url = https://github.com/kevinw/pyflakes-vim.git
+[submodule "_vim/bundle/tagbar"]
+	path = _vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "_vim/bundle/supertab"]
+	path = _vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "_vim/bundle/snipmate"]
+	path = _vim/bundle/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "_vim/bundle/vim-latex"]
+	path = _vim/bundle/vim-latex
+	url = https://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex.git
+[submodule "_vim/bundle/vim-scala"]
+	path = _vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala.git
+[submodule "_vim/bundle/vim-slime"]
+	path = _vim/bundle/vim-slime
+	url = https://github.com/jpalardy/vim-slime.git
