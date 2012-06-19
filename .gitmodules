@@ -40,3 +40,6 @@
 [submodule "_vim/bundle/closetag"]
 	path = _vim/bundle/closetag
 	url = git://github.com/docunext/closetag.vim.git
+[submodule "_vim/bundle/solarized"]
+	path = _vim/bundle/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
