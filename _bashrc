@@ -6,15 +6,18 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # User specific aliases and functions
-export AKKA_HOME=/usr/local/typesafe-stack
 export ANT_HOME=/usr/share/ant
+export WORKON_HOME=~/.envs
+export VIRTUALENVWRAPPER_PYTHON=$HOME/.pythonbrew/pythons/Python-2.7.2/bin/python
+export _JAVA_OPTIONS="-Xms128m -Xmx1g"
 
 alias py=python
 alias rb=ruby
-alias ply=/usr/local/play/play
+alias ply=/home/egbutter/sandbox/Play20/play
 
 # load pybrew/rvm into a shell session "as a function"
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 [[ -s "/home/egbutter/.rvm/scripts/rvm" ]] && source "/home/egbutter/.rvm/scripts/rvm"
 
-export PATH=/home/egbutter/.pythonbrew/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/typesafe-stack/bin:/usr/local/sbt:/usr/local/play:/home/egbutter/.bashscripts:/home/egbutter/.rvm/bin:/home/egbutter/.local/bin:/home/egbutter/bin:/usr/local/heroku-client
+source /home/egbutter/.pythonbrew/pythons/Python-2.7.2/bin/virtualenvwrapper.sh
+export PATH=/home/egbutter/.pythonbrew/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/egbutter/.bashscripts:/home/egbutter/.rvm/bin:/home/egbutter/.local/bin:/home/egbutter/bin:/usr/local/heroku-client:/usr/local/osmosis-0.40.1/bin:/usr/local/osm2pgsql

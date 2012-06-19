@@ -4,7 +4,7 @@ call pathogen#helptags()
 filetype on "add filetype on top
 filetype plugin indent on 
 syntax on "always keep syntax highlighting on
-colorscheme molokai
+colorscheme ron
 set title "put title on top of vim
 set ruler "line nums
 set history=1000 "increase buffer history
