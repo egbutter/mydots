@@ -37,3 +37,6 @@
 [submodule "_vim/bundle/vim-slime"]
 	path = _vim/bundle/vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
+[submodule "_vim/bundle/closetag"]
+	path = _vim/bundle/closetag
+	url = git://github.com/docunext/closetag.vim.git
