@@ -1,9 +1,14 @@
-filetype off "must be off to call pathogen bundles
+"filetype off "must be off to call pathogen bundles
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
-filetype on "add filetype on top
-filetype plugin indent on 
-syntax on "always keep syntax highlighting on
+"filetype on "add filetype on top
+"filetype plugin indent on 
+syntax enable "always keep syntax highlighting on
+set background=dark
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
 colorscheme ron
 set title "put title on top of vim
 set ruler "line nums
@@ -30,6 +35,8 @@ map <c-h> <c-w>h
 let mapleader=","
 map <leader>todo <Plug>TaskList 
 map <leader>undo :GundoToggle<CR>
+map <leader>v :sp ~/.vimrc
+map <leader>V :source ~/.vimrc
 let g:pyflakes_use_quickfix = 0
 let g:pep8_map='<leader>pep8'
 let g:slime_target = "screen"

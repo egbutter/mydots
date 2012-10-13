@@ -10,6 +10,7 @@ export ANT_HOME=/usr/share/ant
 export WORKON_HOME=~/.envs
 export VIRTUALENVWRAPPER_PYTHON=$HOME/.pythonbrew/pythons/Python-2.7.2/bin/python
 export _JAVA_OPTIONS="-Xms128m -Xmx1g"
+export TERM="xterm-256color"
 
 alias py=python
 alias rb=ruby
@@ -20,4 +21,4 @@ alias ply=/home/egbutter/sandbox/Play20/play
 [[ -s "/home/egbutter/.rvm/scripts/rvm" ]] && source "/home/egbutter/.rvm/scripts/rvm"
 
 source /home/egbutter/.pythonbrew/pythons/Python-2.7.2/bin/virtualenvwrapper.sh
-export PATH=/home/egbutter/.pythonbrew/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/egbutter/.bashscripts:/home/egbutter/.rvm/bin:/home/egbutter/.local/bin:/home/egbutter/bin:/usr/local/heroku-client:/usr/local/osmosis-0.40.1/bin:/usr/local/osm2pgsql
+export PATH=/home/egbutter/.pythonbrew/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/egbutter/.bashscripts:/home/egbutter/.rvm/bin:/home/egbutter/.local/bin:/home/egbutter/bin:/usr/local/heroku-client:/usr/local/osmosis-0.40.1/bin:/usr/local/osm2pgsql:/usr/local/MATLAB/R2011a/bin:/home/egbutter/sandbox/UbiGraph-alpha-0.2.4-Linux32-Fedora-9/bin

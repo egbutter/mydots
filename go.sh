@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#kudos sontek https://github.com/sontek/dotfiles.git
+#kudos sontek https://github.com/sontek/dotfiles
 
 # if cygwin, replace $HOME=/home/username use /cygdrive/c/vim/
 # _vimrc -> /cygdrive/c/vim/_vimrc  
@@ -31,7 +31,6 @@ else
 fi
 
 # setup git submodules
-cd _vim
 git submodule sync
 git submodule init
 git submodule update
@@ -40,5 +39,5 @@ git submodule foreach git submodule init
 git submodule foreach git submodule update
 
 # setup command-t
-cd bundle/command-t
+cd _vim/bundle/command-t
 rake make
