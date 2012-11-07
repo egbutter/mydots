@@ -1,8 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/home/egbutter/Dropbox/sandbox/greenster/FoodKeywordMiner/Util'
-let g:netrw_dirhist_2='/home/egbutter'
-let g:netrw_dirhist_3='/home/egbutter/Dropbox/documents/class/Y04Sem02/STA290/gelman.examples/exam'
-let g:netrw_dirhist_4='/home/egbutter/Dropbox/documents/justice/wava/src/sl-market-sim'
-let g:netrw_dirhist_5='/home/egbutter/Dropbox/sandbox/mindfulbrowsing/mindfulbrowsing.firefoxextension/chrome'
-let g:netrw_dirhist_6='/home/egbutter/Dropbox/sandbox/mindfulbrowsing/mindfulbrowsing.firefoxextension/skin'
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/home/egbutter/Dropbox/documents/research/hedgedhog/README'

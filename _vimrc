@@ -1,22 +1,22 @@
-"filetype off "must be off to call pathogen bundles
+filetype off "must be off to call pathogen bundles
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
-"filetype on "add filetype on top
-"filetype plugin indent on 
+filetype on "add filetype on top
+filetype plugin indent on 
 syntax enable "always keep syntax highlighting on
 set background=dark
 let g:solarized_termtrans=1
 let g:solarized_termcolors=256
 let g:solarized_contrast="high"
 let g:solarized_visibility="high"
-colorscheme ron
+colorscheme blue
 set title "put title on top of vim
 set ruler "line nums
 set history=1000 "increase buffer history
 set number
 set wildmode=list:longest "bashlike file switch
-set tabstop=4 "tab=4spaces
-set shiftwidth=4
+setlocal tabstop=4 "tab=4spaces
+setlocal shiftwidth=4
 set expandtab
 set autoindent
 set smartindent
