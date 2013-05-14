@@ -2,14 +2,18 @@
 ## just handles vim for now -- this is urgent ... extend later ...
 ## this is still windows, so needs dos endings (no d2u!)
 
-$vimpath = $null
-Switch -regex ( $env:path.Split(";") ) {
-    "C:.*vim73" { 
-        $vimpath = $_.Substring( 0, $_.Length - $_.LastIndexOf("vim73") + 1 )
-        break
-    }
-} 
-If (!$vimpath) { Throw "Please add vim73 to your \$PATH" }
+$vimpath = $null 
+
+($env:path.Split(";")) 
+
+Switch -regex ($env:path.Split(";")) 
+    {
+        "vim73" { 
+            $vimpath = $_.Substring( 0, $_.Length - $_.LastIndexOf("vim73") + 1 )
+            break
+        }
+    } 
+If (!$vimpath) { Throw "Please add vim73 to your %PATH%" }
 
 function LinkFile ([string]$tolink) {
 
@@ -22,23 +26,25 @@ function LinkFile ([string]$tolink) {
 
     If (Test-Path $target ) { move $target $target".bak" }
 
-    mklink /D $target $source
+    junction $target $source
 }
 
-If ( ( $args[0] -eq "vim" ) {
-    For ( $i in _vim* ) {
-        link_file $i
+If ( $args[0] -eq "vim" ) {
+    Foreach ( $i in _vim* ) {
+        LinkFile $i
     }
 } 
 
-# setup git submodules
-git.cmd submodule sync
-git.cmd submodule init
-git.cmd submodule update
-git.cmd submodule foreach git pull origin master
-git.cmd submodule foreach git submodule init
-git.cmd submodule foreach git submodule update
+# make sure posh-git is set up
+. (Resolve-Path "$env:LOCALAPPDATA\GitHub\shell.ps1")
+# update all the submodules
+git. (Resolve-Path "$env:LOCALAPPDATA\GitHub\shell.ps1").cmd submodule sync
+git submodule init
+git submodule update
+git submodule foreach git pull origin master
+git submodule foreach git submodule init
+git submodule foreach git submodule update
 
 # setup command-t
-cd _vim/bundle/command-t
-rake make
+#cd _vim/bundle/command-t
+#rake make
