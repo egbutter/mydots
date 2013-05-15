@@ -1,27 +1,51 @@
+[submodule "_vim/bundle/autoclose"]
+	path = _vim/bundle/autoclose
+	url = https://github.com/Townk/vim-autoclose.git
+[submodule "bundle\\gundo"]
+	path = bundle\\gundo
+	url = https://github.com/sjl/gundo.vim.git
 [submodule "bundle\\snipmate"]
 	path = bundle\\snipmate
 	url = https://github.com/msanders/snipmate.vim.git
 [submodule "bundle\\tasklist"]
 	path = bundle\\tasklist
 	url = https://github.com/vim-scripts/TaskList.vim.git
-[submodule "bundle\\gundo"]
-	path = bundle\\gundo
-	url = https://github.com/sjl/gundo.vim.git
 [submodule "bundle\\pep8"]
 	path = bundle\\pep8
 	url = https://github.com/vim-scripts/pep8.git
-[submodule "bundle\\pyflakes"]
-	path = bundle\\pyflakes
-	url = https://github.com/mitechie/pyflakes-pathogen.git
-[submodule "bundle\\command-t"]
-	path = bundle\\command-t
-	url = https://github.com/wincent/Command-T.git
 [submodule "bundle\\minibufexpl"]
 	path = bundle\\minibufexpl
 	url = https://github.com/sontek/minibufexpl.vim.git
+[submodule "_vim/bundle/tagbar"]
+	path = _vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
 [submodule "bundle\\supertab"]
 	path = bundle\\supertab
 	url = https://github.com/ervandew/supertab.git
+[submodule "_vim/bundle/snipmate"]
+	path = _vim/bundle/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
 [submodule "bundle\\vim-slime"]
 	path = bundle\\vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
+[submodule "_vim/bundle/vim-latex"]
+	path = _vim/bundle/vim-latex
+	url = https://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex.git
+[submodule "_vim/bundle/vim-scala"]
+	path = _vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala.git
+[submodule "_vim/bundle/vim-slime"]
+	path = _vim/bundle/vim-slime
+	url = https://github.com/jpalardy/vim-slime.git
+[submodule "_vim/bundle/closetag"]
+	path = _vim/bundle/closetag
+	url = git://github.com/docunext/closetag.vim.git
+[submodule "_vim/bundle/solarized"]
+	path = _vim/bundle/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule ".\\_vim\\bundle\\vim-ps"]
+	path = .\\_vim\\bundle\\vim-ps
+	url = git@github.com:vim-scripts/Windows-PowerShell-Syntax-Plugin.git
+[submodule ".\\_vim\\bundle\\ctrlp"]
+	path = .\\_vim\\bundle\\ctrlp
+	url = git@github.com:kien/ctrlp.vim.git

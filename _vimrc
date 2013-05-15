@@ -35,14 +35,15 @@ map <c-h> <c-w>h
 let mapleader=","
 map <leader>todo <Plug>TaskList 
 map <leader>undo :GundoToggle<CR>
-map <leader>v :sp ~/.vimrc
-map <leader>V :source ~/.vimrc
+map <leader>v :sp .vimrc
+map <leader>V :source .vimrc
 let g:pyflakes_use_quickfix = 0
 let g:pep8_map='<leader>pep8'
 let g:slime_target = "screen"
 au FileType python set omnifunc=pythoncomplete#Complete "tab completion 
 let g:SuperTabDefaultCompletionType="context"
 set completeopt=menuone,longest,preview "python documentation on pw
+set runtimepath^=.vim/bundle/ctrlp.vim
 "include code completion from venvs for python
 py << EOF
 import os.path
