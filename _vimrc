@@ -56,5 +56,5 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 set ff=unix
 "check if nix or dos then :set ff=unix and :set ff=dos
-"what's up with the weird commands like sift+control+v block visual instead of
+"what's up with the weird commands like shift+control+v block visual instead of
 "control v?  get this fixed FIXME
