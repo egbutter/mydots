@@ -2,36 +2,44 @@
 ## just handles vim for now -- this is urgent ... extend later ...
 ## this is still windows, so needs dos endings (no d2u!)
 
+set-executionpolicy remotesigned
+Remove-Variable -Force HOME
+set-variable HOME $env:userprofile
+set-location $env:userprofile -PassThru
 
-$psprof = "$env:systemroot\system32\WindowsPowerShell\v1.0"
-$psmod = "$env:systemroot\system32\WindowsPowerShell\v1.0\Modules"
+try {
+    import-module psget
+} catch {
+    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+}
 
-$xlpath = "$env:appdata\Microsoft\Excel\XLSTART"
+install-module posh-git -Destination "$($home)/.psmods"
+install-module posh-hg -Destination "$($home)/.psmods"
+install-module pscx -Destination "$($home)/.psmods"
+install-module poshcode -Destination "$($home)/.psmods"
+install-module find-string -Destination "$($home)/.psmods"
+install-module psurl -Destination "$($home)/.psmods"
 
-$vimpath = $null 
-Switch -regex ($env:path.Split(";")) 
-{
-    "C:.*vim73" { 
-        echo $._
-        $vimpath = $_.Substring( 0, $_.Length - $_.LastIndexOf("vim73") + 1 )
-        break
-    }
-} 
-If (!$vimpath) { Throw "Please add vim73 to your %PATH%" }
-echo "path"
-echo $env:path.Split(";")
-echo "vim"
-echo ($vimpath)
+# get-poshcode cmatrix -Destination "$($home)/.psmods"
+# error proxycred https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
+
+$psprof = $profile.currentuserallhosts
+junction $psprof "$($pwd)\_psprofile.ps1"
+
+$psmods = $env:psmodulepath
+$psmods += ";$($home)/.psmods"
+[Environment]::SetEnvironmentVariable("PSModulePath", $psmods)
+
+#$xlpath = "$env:appdata\Microsoft\Excel\XLSTART"
 
 function LinkFile ([string]$tolink) {
 
-    $source="$($pwd)/$(tolink)"
-    echo $source
+    $source="$($pwd)\$(tolink)"
 
     If ($tolink -eq "_vim") { 
-        $target="$($vimpath)\$($tolink)files"  # peculiar win32 gvim inconsistency
+        $target="$($home)\vimfiles"  # peculiar win32 gvim inconsistency
     } Else {
-        $target="$($vimpath)\$($tolink)"
+        $target="$($home)\$($tolink)"
     }
 
     If (Test-Path $target) { move $target "$target.bak" }
@@ -59,14 +67,18 @@ Switch -regex ($args)
     }
 }
 
-# make sure posh-git is set up
-. (Resolve-Path "$env:LOCALAPPDATA\GitHub\shell.ps1")
+# load virtualenvwrapper-powershell else throw error
+try {
+    import-module virtualenvwrapper
+} catch {
+    Throw "ERROR: please pip install virtualenvwrapper-powershell"
+}
 
 # make sure pyflakes is up to date
 try {
     easy_install pyflakes --upgrade
 } catch {
-    Throw "Please install python 27, setuptools, pyflakes first!"
+    Throw "ERROR: please pip install pyflakes"
 }
 
 # update all the submodules

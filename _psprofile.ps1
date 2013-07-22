@@ -1,4 +1,13 @@
-Set-Location $env:userprofile -PassThru
+set-location $env:userprofile -PassThru
+
+import-module psget
+import-module poshcode
+import-module pscx
+import-module posh-hg
+import-module posh-git
+import-module find-string
+import-module psurl
+import-module virtualenvwrapper
 
 set-alias cat        get-content
 set-alias cd         set-location
@@ -32,6 +41,11 @@ set-alias ren        rename-item
 set-alias set        set-variable
 set-alias type       get-content
 set-alias which      get-command
+
+function grep 
+{
+    get-childitem $args[0] -include $args[1] -rec | select-string -pattern $args[2:]
+}
 
 function tail
 {
