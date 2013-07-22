@@ -5,7 +5,6 @@
 set-executionpolicy remotesigned
 Remove-Variable -Force HOME
 set-variable HOME $env:userprofile
-set-location $env:userprofile -PassThru
 
 try {
     import-module psget
@@ -71,20 +70,27 @@ Switch -regex ($args)
 try {
     import-module virtualenvwrapper
 } catch {
-    Throw "ERROR: please pip install virtualenvwrapper-powershell"
+    try {
+        pip install virtualenvwrapper-powershell
+    } catch {
+        Throw "ERROR: please pip install virtualenvwrapper-powershell"
+    }
 }
 
 # make sure pyflakes is up to date
 try {
-    easy_install pyflakes --upgrade
+    pip install pyflakes
 } catch {
     Throw "ERROR: please pip install pyflakes"
 }
 
 # update all the submodules
+cd _vim
 git submodule sync
 git submodule init
 git submodule update
 git submodule foreach git pull origin master
 git submodule foreach git submodule init
 git submodule foreach git submodule update
+
+set-location $home -PassThru
