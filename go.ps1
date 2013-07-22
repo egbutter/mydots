@@ -3,8 +3,7 @@
 ## this is still windows, so needs dos endings (no d2u!)
 
 set-executionpolicy remotesigned
-Remove-Variable -Force HOME
-set-variable HOME $env:userprofile
+set-variable -name HOME -value $env:USERPROFILE -force
 
 try {
     import-module psget
@@ -23,6 +22,7 @@ install-module psurl -Destination "$($home)/.psmods"
 # error proxycred https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
 $psprof = $profile.currentuserallhosts
+if (test-path $psprof) { move $psprof "$($psprof).bak" }
 junction $psprof "$($pwd)\_psprofile.ps1"
 
 $psmods = $env:psmodulepath
@@ -30,6 +30,9 @@ $psmods += ";$($home)/.psmods"
 [Environment]::SetEnvironmentVariable("PSModulePath", $psmods)
 
 #$xlpath = "$env:appdata\Microsoft\Excel\XLSTART"
+
+
+if if (!(test-path "$($home)\vimfiles")) { mkdir "$($home)\vimfiles" }
 
 function LinkFile ([string]$tolink) {
 
@@ -41,7 +44,7 @@ function LinkFile ([string]$tolink) {
         $target="$($home)\$($tolink)"
     }
 
-    If (Test-Path $target) { move $target "$target.bak" }
+    If (Test-Path $target) { move $target "$($target).bak" }
 
     junction $target $source
 }
@@ -85,7 +88,7 @@ try {
 }
 
 # update all the submodules
-cd _vim
+cd "$($home)\vimfiles"
 git submodule sync
 git submodule init
 git submodule update
