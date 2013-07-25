@@ -11,28 +11,24 @@ try {
     (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
 }
 
-install-module posh-git -Destination "$($home)/.psmods"
-install-module posh-hg -Destination "$($home)/.psmods"
-install-module pscx -Destination "$($home)/.psmods"
-install-module poshcode -Destination "$($home)/.psmods"
-install-module find-string -Destination "$($home)/.psmods"
-install-module psurl -Destination "$($home)/.psmods"
+install-module posh-git
+install-module posh-hg
+install-module pscx
+install-module poshcode
+install-module find-string
+install-module psurl
 
 # get-poshcode cmatrix -Destination "$($home)/.psmods"
 # error proxycred https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
 $psprof = $profile.currentuserallhosts
 if (test-path $psprof) { move $psprof "$($psprof).bak" }
-junction $psprof "$($pwd)\_psprofile.ps1"
-
-$psmods = $env:psmodulepath
-$psmods += ";$($home)/.psmods"
-[Environment]::SetEnvironmentVariable("PSModulePath", $psmods)
+cmd /c mklink /H $psprof "$($pwd)\_psprofile.ps1"
 
 #$xlpath = "$env:appdata\Microsoft\Excel\XLSTART"
 
 
-if if (!(test-path "$($home)\vimfiles")) { mkdir "$($home)\vimfiles" }
+if (!(test-path "$($home)\vimfiles")) { mkdir "$($home)\vimfiles" }
 
 function LinkFile ([string]$tolink) {
 
@@ -44,9 +40,13 @@ function LinkFile ([string]$tolink) {
         $target="$($home)\$($tolink)"
     }
 
-    If (Test-Path $target) { move $target "$($target).bak" }
+    if (test-path $target) { move $target "$($target).bak" }
 
-    junction $target $source
+    if ($target.psiscontainer) {
+        junction -s $target $source
+    } else {
+        cmd /c mklink /H $target $source
+    }
 }
 
 # here we handle the command line args
