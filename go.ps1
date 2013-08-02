@@ -5,11 +5,8 @@
 set-executionpolicy remotesigned
 set-variable -name HOME -value $env:USERPROFILE -force
 
-try {
-    import-module psget
-} catch {
-    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
-}
+(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+import-module psget
 
 install-module posh-git
 install-module posh-hg
