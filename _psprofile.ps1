@@ -77,3 +77,11 @@ function prompt
         invoke-expression $str 
     }
 }
+
+trap [Exception]
+{
+	Write-Error "An exception was encountered";
+	Write-Error $_.Exception.Message;
+	Write-Error $_.Exception.StackTrace;
+	Exit;
+}
