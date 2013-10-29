@@ -15,21 +15,21 @@ echo "pointed powershell currentuserallhosts to userprofile"
 
 # make sure the env vars are set correctly, inconsistent on win32 
 $psmods = join-path $myhome ".psmodules"
-if ($env:psmodulepath.split(";") -notcontains $psmods) {
+if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
     $env:psmodulepath += $psmods
     [Environment]::SetEnvironmentVariable("psmodulepath", $psmods, "User")
     echo "pointed powershell psmodules to userprofile"
 }
 
 $vimpath = join-path $myhome ".vim"
-if ($env:vimruntime.split(";") -notcontains $vimpath) {
+if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
     $env:vimruntime += $vimpath
     [Environment]::SetEnvironmentVariable("vimruntime", $vimpath, "User")
     echo "pointed vimruntime to userprofile"
 }
 
 $xlpath = join-path $myhome ".xlstart"
-$xlappdata "$env:appdata\Microsoft\Excel\XLSTART"
+$xlappdata = "$env:appdata\Microsoft\Excel\XLSTART"
 if (test-path $xlappdata) 
 {
     move $xlappdata "$($xlappdata).bak"
@@ -38,8 +38,15 @@ if (test-path $xlappdata)
 }
 
 
-(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
-import-module psget
+try 
+{
+    import-module psget
+}
+catch 
+{
+    echo "downloading psget"
+    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+}
 
 install-module posh-git
 install-module posh-hg
@@ -110,7 +117,7 @@ try {
 }
 
 # update all the submodules
-cd "$($myhome)\vimfiles"
+cd $vimpath
 git submodule sync
 git submodule init
 git submodule update
