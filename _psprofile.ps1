@@ -1,4 +1,5 @@
 set-location $env:userprofile -PassThru
+set-variable -name home -value $env:userprofile -force
 
 import-module psget
 import-module poshcode
