@@ -1,74 +1,120 @@
-## this is a Powershell version of eponymous bash script
-## just handles vim for now -- this is urgent ... extend later ...
-## this is still windows, so needs dos endings (no d2u!)
+##############################################################################
+##
+## go.ps1
+##
+## by ericbeurre
+##
+##############################################################################
+
+<#
+.SYNOPSIS
+
+Bootstrap my powershell environment
+
+.EXAMPLE
+
+Document-DBScripts.ps1 vim,ps
+
+#>
+
+Param
+(
+    [String] $gomode="all"
+)
 
 set-executionpolicy remotesigned
-$myhome = $env:userprofile  # bc forcing $home to something else is a pain
-
-
-# explicitly set currentuserallhosts to %userprofile%
-$psprof = $profile.currentuserallhosts
-if (test-path $psprof) { move $psprof "$($psprof).bak" }
-cmd /c mklink /H $psprof "$($myhome)\.psprofile.ps1"
-echo "pointed powershell currentuserallhosts to userprofile"
+$myhome = $env:userprofile  # bc forcing $home to something else is a pain  
 
 
 # make sure the env vars are set correctly, inconsistent on win32 
 $psmods = join-path $myhome ".psmodules"
 if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
     $env:psmodulepath += $psmods
-    [Environment]::SetEnvironmentVariable("psmodulepath", $psmods, "User")
-    echo "pointed powershell psmodules to userprofile"
+    [Environment]::SetEnvironmentVariable("psmodulepath", $env:psmodulepath, "User")
+    echo "pointed powershell psmodules to userprofile:"
+    echo $env:psmodulepath
 }
 
 $vimpath = join-path $myhome ".vim"
 if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
     $env:vimruntime += $vimpath
-    [Environment]::SetEnvironmentVariable("vimruntime", $vimpath, "User")
-    echo "pointed vimruntime to userprofile"
-}
-
-$xlpath = join-path $myhome ".xlstart"
-$xlappdata = "$env:appdata\Microsoft\Excel\XLSTART"
-if (test-path $xlappdata) 
-{
-    move $xlappdata "$($xlappdata).bak"
-    junction -s $xlpath $xlappdata
-    echo "pointed XLSTART to userprofile"
+    [Environment]::SetEnvironmentVariable("vimruntime", $env:vimruntime, "User")
+    echo "pointed vimruntime to userprofile:"
+    echo $env:vimruntime
 }
 
 
-try 
-{
-    import-module psget
-}
-catch 
+
+$modules = get-module -list
+if ($modules -notcontains "psget") 
 {
     echo "downloading psget"
     (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
 }
+import-module psget
 
 install-module posh-git
 install-module posh-hg
 install-module pscx
-install-module poshcode
 install-module find-string
 install-module psurl
 
+install-module poshcode
 #BROKEN: get-poshcode cmatrix -Destination $psmods
 # "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
+# load virtualenvwrapper-powershell else throw error
+if ($modules -notcontains "virtualenvwrapper") 
+{
+    try {
+        echo "trying to install virtualenvwrapper ..."
+        pip install virtualenvwrapper-powershell
+    } catch {
+        echo "WARNING: python and/or pip and/or virtualenvwrapper-powershell not installed"
+    }
+} 
+$workonhome = join-path $myhome ".envs"
+if (-not $env:workon_home -or $env:workon_home -ne $workonhome) 
+{
+    $env:workon_hom = $workonhome
+    [Environment]::SetEnvironmentVariable("workon_home", $workonhome, "User")
+}
 
-function LinkFile ([string]$tolink) {
+# make sure pyflakes is up to date
+try 
+{
+    pip install pyflakes
+} catch {
+    echo "WARNING: python and/or pip and/or pyflakes not installed, some vim plugins will not work"
+}
 
-    $source="$(join-path $pwd $tolink)"
+# linking the files using mklink for files and junction for dirs
+function LinkFile ([string]$tolink) 
+{
 
-    $dotlink = $tolink -replace "^_", "."
-    $target="$(join-path $myhome $dotlink)"
+    $source = join-path $pwd $tolink; 
+    
+    if ($tolink -eq "_xlstart") 
+    {
+        $xlappdata = "$env:appdata\Microsoft\Excel\XLSTART"; 
+        $target = $xlappdata; 
+    } elseif {
+        $psprof = $profile.currentuserallhosts; 
+        $target = $psprof; 
+    } else {
+        $dotlink = $tolink -replace "^_", "."; 
+        $target = join-path $myhome $dotlink; 
+    }
 
-    if (test-path $target) { move $target "$($target).bak" }
+    if (test-path $target) 
+    { 
+        $bakfile = "$($target).bak"; 
+        echo "moving $target to $bakfile"; 
+        move $target $bakfile; 
+    }
 
-    if ($target.psiscontainer) {
+    if ($target.psiscontainer) 
+    {
         echo "junction -s $target $source"
         junction -s $target $source
     } else {
@@ -77,46 +123,30 @@ function LinkFile ([string]$tolink) {
     }
 }
 
-# here we handle the command line args
-Switch -regex ($args) 
+# here we handle the command line gomode, if none goes to default
+if ($gomode) 
+{ 
+    $gomode = $gomode.split(","); 
+    echo $gomode;  
+} else { 
+    $gomode = "all"; 
+    echo "All"; 
+}
+
+# get our targets 
+Switch ($gomode) 
 {
-    "vim" {
-        Foreach ( $i in "_vim*" ) {
-            LinkFile $i
-        }
-    }  
-    "ps" {
-        Foreach ($i in "_ps*") {
-            LinkFile $i
-        }
-    }
-    default {
-        Foreach ($i in "_*") {
-            LinkFile $i
-        }
-    }
+    "vim" { $targets += ls (join-path $pwd _vim*) } 
+    "ps" { $targets += ls (join-path $pwd _ps*) } 
+    "xl" { $targets += ls (join-path $pwd _xl*) } 
+    default { $targets = ls (join-path $pwd _*) } 
 }
 
-# load virtualenvwrapper-powershell else throw error
-try {
-    import-module virtualenvwrapper
-} catch {
-    try {
-        echo "trying to install virtualenvwrapper ..."
-        pip install virtualenvwrapper-powershell
-    } catch {
-        echo "WARNING: python and/or pip and/or virtualenvwrapper-powershell not installed"
-    }
-}
+# link the targets  
+$targets | foreach-object { linkfile $_.name }
 
-# make sure pyflakes is up to date
-try {
-    pip install pyflakes
-} catch {
-    echo "WARNING: python and/or pip and/or pyflakes not installed, some vim plugins will not work"
-}
 
-# update all the submodules
+# update all the submodules in .vim directory 
 cd $vimpath
 git submodule sync
 git submodule init
@@ -125,5 +155,3 @@ git submodule foreach git pull origin master
 git submodule foreach git submodule init
 git submodule foreach git submodule update
 
-set-location $myhome -PassThru
-set-variable -name HOME -value $env:USERPROFILE -force  # may not persist sessions
