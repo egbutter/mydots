@@ -1,16 +1,20 @@
 set-location $env:userprofile -PassThru
 set-variable -name home -value $env:userprofile -force
 
-import-module psget
-import-module poshcode
-import-module pscx
-import-module posh-hg
-import-module posh-git
-import-module find-string
-import-module psurl
-import-module virtualenvwrapper
+try {
+    import-module psget
+    import-module poshcode
+    import-module pscx
+    import-module posh-hg
+    import-module posh-git
+    import-module find-string
+    import-module psurl
+    import-module virtualenvwrapper
+} catch {
+    echo "could not import all of our typical deps ... try running go.ps1 again!"
+}
 
-set-alias which      get-command
+set-alias which get-command
 
 function grep 
 {

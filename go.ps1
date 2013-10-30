@@ -34,14 +34,16 @@ $env:home = $myhome;
 
 # this is just for my own psmodules like utils.psm1
 $psmods = join-path $myhome ".psmodules"
-if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
-    $env:psmodulepath += $env:psmodulepath 
-}
 
 # a lot of scripts e.g., virtualenvwrapper-powershell, assume this location is available
 $psmdefault = join-path $myhome "Documents\WindowsPowerShell\Modules"
+
+if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
+    $env:psmodulepath += ";$($psmods)"
+}
+
 if ($env:psmodulepath.split(";") -notcontains $psmdefault) {
-    $env:psmodulepath += $psmdefault  # at the front, this gets psget files, etc.
+    $env:psmodulepath += ";$($psmdefault)"
 }
 [Environment]::SetEnvironmentVariable("psmodulepath", $env:psmodulepath, "User")
 echo "cleaned up powershell psmodule default paths:"
@@ -49,11 +51,11 @@ echo $env:psmodulepath
 
 $vimpath = join-path $myhome ".vim"
 if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
-    $env:vimruntime += $vimpath
-    [Environment]::SetEnvironmentVariable("vimruntime", $env:vimruntime, "User")
-    echo "pointed vimruntime to userprofile:"
-    echo $env:vimruntime
+    $env:vimruntime += ";$($vimpath)"
 }
+[Environment]::SetEnvironmentVariable("vimruntime", $env:vimruntime, "User")
+echo "pointed vimruntime to userprofile:"
+echo $env:vimruntime
 
 
 #
@@ -80,9 +82,9 @@ $source = join-path $pwd $tolink;
     { 
         $bakfile = "$($target).bak"; 
         echo "removing last .bak, copying $target to $bakfile"; 
-        if (test-path $bakfile) { rm $bakfile -recurse; }  
-        copy-item -path $target -destination $bakfile -recurse; 
-        if ((Get-Item $target).psiscontainer) { junction -d $target } else { rm $target }
+        if (test-path $bakfile) { rm $bakfile -recurse -force; }  
+        copy-item -path $target -destination $bakfile -recurse -force; 
+        if ((Get-Item $target).psiscontainer) { junction -d $target } else { rm $target -force }
 
     }
 
@@ -184,3 +186,4 @@ git submodule foreach git pull origin master
 git submodule foreach git submodule init
 git submodule foreach git submodule update
 
+cd $home
