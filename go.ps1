@@ -28,14 +28,24 @@ $env:home = $myhome;
 [Environment]::SetEnvironmentVariable("HOME", $env:home, "User"); 
 
 
+#
 # make sure the env vars are set correctly, inconsistent on win32 
+#
+
+# this is just for my own psmodules like utils.psm1
 $psmods = join-path $myhome ".psmodules"
 if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
-    $env:psmodulepath += $psmods
-    [Environment]::SetEnvironmentVariable("psmodulepath", $env:psmodulepath, "User")
-    echo "pointed powershell psmodules to userprofile:"
-    echo $env:psmodulepath
+    $env:psmodulepath += $env:psmodulepath 
 }
+
+# a lot of scripts e.g., virtualenvwrapper-powershell, assume this location is available
+$psmdefault = join-path $myhome "Documents\WindowsPowerShell\Modules"
+if ($env:psmodulepath.split(";") -notcontains $psmdefault) {
+    $env:psmodulepath += $psmdefault  # at the front, this gets psget files, etc.
+}
+[Environment]::SetEnvironmentVariable("psmodulepath", $env:psmodulepath, "User")
+echo "cleaned up powershell psmodule default paths:"
+echo $env:psmodulepath
 
 $vimpath = join-path $myhome ".vim"
 if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
@@ -46,51 +56,10 @@ if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath))
 }
 
 
-
-$modules = get-module -list | ForEach-Object { $_.name }
-if ($modules -notcontains "psget") 
-{
-    echo "downloading psget"
-    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
-}
-import-module psget
-
-install-module posh-git -destination $psmods -EA silentlycontinue
-install-module posh-hg -destination $psmods -EA silentlycontinue
-install-module pscx -destination $psmods -EA silentlycontinue
-install-module find-string -destination $psmods -EA silentlycontinue
-install-module psurl -destination $psmods -EA silentlycontinue
-install-module poshcode -destination $psmods -EA silentlycontinue
-
-#BROKEN: get-poshcode cmatrix -Destination $psmods
-# "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
-
-# load virtualenvwrapper-powershell else throw error
-if ($modules -notcontains "virtualenvwrapper") 
-{
-    try {
-        echo "trying to install virtualenvwrapper ..."
-        pip install virtualenvwrapper-powershell
-    } catch {
-        echo "WARNING: python and/or pip and/or virtualenvwrapper-powershell not installed"
-    }
-} 
-$workonhome = join-path $myhome ".envs"
-if (-not $env:workon_home -or $env:workon_home -ne $workonhome) 
-{
-    $env:workon_hom = $workonhome
-    [Environment]::SetEnvironmentVariable("workon_home", $workonhome, "User")
-}
-
-# make sure pyflakes is up to date
-try 
-{
-    pip install pyflakes
-} catch {
-    echo "WARNING: python and/or pip and/or pyflakes not installed, some vim plugins will not work"
-}
-
+#
 # linking the files using mklink for files and junction for dirs
+#
+
 function LinkFile ([string]$tolink) 
 {
 $source = join-path $pwd $tolink; 
@@ -109,16 +78,18 @@ $source = join-path $pwd $tolink;
 
     if (test-path $target) 
     { 
-        echo "removing last .bak, moving $target to $bakfile"; 
         $bakfile = "$($target).bak"; 
-        if (test-path $bakfile) { rm -recurse $bakfile; }  
-        mv $target $bakfile; 
+        echo "removing last .bak, copying $target to $bakfile"; 
+        if (test-path $bakfile) { rm $bakfile -recurse; }  
+        copy-item -path $target -destination $bakfile -recurse; 
+        if ((Get-Item $target).psiscontainer) { junction -d $target } else { rm $target }
+
     }
 
-    if ($source.psiscontainer) 
+    if ((get-item $source).psiscontainer) 
     {
         echo "directory junction $target to $source"
-        cmd /c mklink /J $target $source 
+        junction -s $target $source 
     } else {
         echo "file junction $target to $source"
         cmd /c mklink /H $target $source 
@@ -148,7 +119,63 @@ Switch ($gomode)
 $targets | where-object {$_.name -notlike "*bash*"} | foreach-object { linkfile $_.name }
 
 
+#
+# download powershell modules 
+#
+
+$modules = get-module -list | ForEach-Object { $_.name }
+if ($modules -notcontains "psget") 
+{
+    echo "downloading psget"
+    (new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+}
+import-module psget
+
+install-module posh-git -destination $psmods -EA silentlycontinue
+install-module posh-hg -destination $psmods -EA silentlycontinue
+install-module pscx -destination $psmods -EA silentlycontinue
+install-module find-string -destination $psmods -EA silentlycontinue
+install-module psurl -destination $psmods -EA silentlycontinue
+install-module poshcode -destination $psmods -EA silentlycontinue
+
+#BROKEN: get-poshcode cmatrix -Destination $psmods
+# "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
+
+
+#
+# load virtualenvwrapper-powershell else throw error
+#
+
+if ($modules -notcontains "virtualenvwrapper") 
+{
+    try {
+        echo "trying to install virtualenvwrapper ..."
+        pip install virtualenvwrapper-powershell
+    } catch {
+        echo "WARNING: python and/or pip and/or virtualenvwrapper-powershell not installed"
+    }
+} 
+$workonhome = join-path $myhome ".envs"
+if (-not $env:workon_home -or $env:workon_home -ne $workonhome) 
+{
+    $env:workon_hom = $workonhome
+    [Environment]::SetEnvironmentVariable("workon_home", $workonhome, "User")
+}
+
+
+# make sure pyflakes is up to date
+try 
+{
+    pip install pyflakes
+} catch {
+    echo "WARNING: python and/or pip and/or pyflakes not installed, some vim plugins will not work"
+}
+
+
+#
 # update all the submodules in .vim directory 
+#
+
 cd $vimpath
 git submodule sync
 git submodule init
