@@ -32,16 +32,8 @@ $env:home = $myhome;
 # make sure the env vars are set correctly, inconsistent on win32 
 #
 
-# this is just for my own psmodules like utils.psm1
-$psmods = join-path $myhome ".psmodules"
-
 # a lot of scripts e.g., virtualenvwrapper-powershell, assume this location is available
 $psmdefault = join-path $myhome "Documents\WindowsPowerShell\Modules"
-
-if (-not $env:psmodulepath -or ($env:psmodulepath.split(";") -notcontains $psmods)) {
-    $env:psmodulepath += ";$($psmods)"
-}
-
 if ($env:psmodulepath.split(";") -notcontains $psmdefault) {
     $env:psmodulepath += ";$($psmdefault)"
 }
@@ -49,6 +41,7 @@ if ($env:psmodulepath.split(";") -notcontains $psmdefault) {
 echo "cleaned up powershell psmodule default paths:"
 echo $env:psmodulepath
 
+# vim install on win32 can be a pain
 $vimpath = join-path $myhome ".vim"
 if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
     $env:vimruntime += ";$($vimpath)"
@@ -73,6 +66,8 @@ $source = join-path $pwd $tolink;
     } elseif ($tolink -eq "_psprofile.ps1")  {
         $psprof = $profile.currentuserallhosts; 
         $target = $psprof; 
+    } elseif ($tolink -like "_ps*")  {
+        $target = join-path $psmdefault $tolink.replace("_ps", "");
     } else { 
         $dotlink = $tolink -replace "^_", "."; 
         $target = join-path $myhome $dotlink; 
@@ -133,14 +128,14 @@ if ($modules -notcontains "psget")
 }
 import-module psget
 
-install-module posh-git -destination $psmods -EA silentlycontinue
-install-module posh-hg -destination $psmods -EA silentlycontinue
-install-module pscx -destination $psmods -EA silentlycontinue
-install-module find-string -destination $psmods -EA silentlycontinue
-install-module psurl -destination $psmods -EA silentlycontinue
-install-module poshcode -destination $psmods -EA silentlycontinue
+install-module posh-git -destination $psmdefault -EA silentlycontinue
+install-module posh-hg -destination $psmdefault -EA silentlycontinue
+install-module pscx -destination $psmdefault -EA silentlycontinue
+install-module find-string -destination $psmdefault -EA silentlycontinue
+install-module psurl -destination $psmdefault -EA silentlycontinue
+install-module poshcode -destination $psmdefault -EA silentlycontinue
 
-#BROKEN: get-poshcode cmatrix -Destination $psmods
+#BROKEN: get-poshcode cmatrix -Destination $psmdefault
 # "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
 
@@ -151,7 +146,7 @@ install-module poshcode -destination $psmods -EA silentlycontinue
 if ($modules -notcontains "virtualenvwrapper") 
 {
     try {
-        echo "trying to install virtualenvwrapper ..."
+        echo "installing virtualenvwrapper to $psmdefault"
         pip install virtualenvwrapper-powershell
     } catch {
         echo "WARNING: python and/or pip and/or virtualenvwrapper-powershell not installed"
