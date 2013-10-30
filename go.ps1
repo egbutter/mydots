@@ -22,8 +22,10 @@ Param
     [String] $gomode="all"
 )
 
-set-executionpolicy remotesigned
+set-executionpolicy remotesigned 
 $myhome = $env:userprofile  # bc forcing $home to something else is a pain  
+$env:home = $myhome; 
+[Environment]::SetEnvironmentVariable("HOME", $env:home, "User"); 
 
 
 # make sure the env vars are set correctly, inconsistent on win32 
@@ -45,7 +47,7 @@ if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath))
 
 
 
-$modules = get-module -list
+$modules = get-module -list | ForEach-Object { $_.name }
 if ($modules -notcontains "psget") 
 {
     echo "downloading psget"
@@ -53,13 +55,13 @@ if ($modules -notcontains "psget")
 }
 import-module psget
 
-install-module posh-git
-install-module posh-hg
-install-module pscx
-install-module find-string
-install-module psurl
+install-module posh-git -destination $psmods -EA silentlycontinue
+install-module posh-hg -destination $psmods -EA silentlycontinue
+install-module pscx -destination $psmods -EA silentlycontinue
+install-module find-string -destination $psmods -EA silentlycontinue
+install-module psurl -destination $psmods -EA silentlycontinue
+install-module poshcode -destination $psmods -EA silentlycontinue
 
-install-module poshcode
 #BROKEN: get-poshcode cmatrix -Destination $psmods
 # "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
@@ -91,8 +93,7 @@ try
 # linking the files using mklink for files and junction for dirs
 function LinkFile ([string]$tolink) 
 {
-
-    $source = join-path $pwd $tolink; 
+$source = join-path $pwd $tolink; 
     
     if ($tolink -eq "_xlstart") 
     {
@@ -101,25 +102,26 @@ function LinkFile ([string]$tolink)
     } elseif ($tolink -eq "_psprofile.ps1")  {
         $psprof = $profile.currentuserallhosts; 
         $target = $psprof; 
-    } else {
+    } else { 
         $dotlink = $tolink -replace "^_", "."; 
         $target = join-path $myhome $dotlink; 
     }
 
     if (test-path $target) 
     { 
+        echo "removing last .bak, moving $target to $bakfile"; 
         $bakfile = "$($target).bak"; 
-        echo "moving $target to $bakfile"; 
-        mv $target $bakfile -force; 
+        if (test-path $bakfile) { rm -recurse $bakfile; }  
+        mv $target $bakfile; 
     }
 
-    if ($target.psiscontainer) 
+    if ($source.psiscontainer) 
     {
-        echo "junction -s $target $source"
-        junction -s $target $source
+        echo "directory junction $target to $source"
+        cmd /c mklink /J $target $source 
     } else {
-        echo "cmd /c mklink /H $target $source"
-        cmd /c mklink /H $target $source
+        echo "file junction $target to $source"
+        cmd /c mklink /H $target $source 
     }
 }
 
@@ -143,7 +145,7 @@ Switch ($gomode)
 }
 
 # link the targets  
-$targets | foreach-object { linkfile $_.name }
+$targets | where-object {$_.name -notlike "*bash*"} | foreach-object { linkfile $_.name }
 
 
 # update all the submodules in .vim directory 
