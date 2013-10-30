@@ -13,7 +13,7 @@ Bootstrap my powershell environment
 
 .EXAMPLE
 
-Document-DBScripts.ps1 vim,ps
+go.ps1 vim,ps,xl
 
 #>
 
@@ -98,7 +98,7 @@ function LinkFile ([string]$tolink)
     {
         $xlappdata = "$env:appdata\Microsoft\Excel\XLSTART"; 
         $target = $xlappdata; 
-    } elseif {
+    } elseif ($tolink -eq "_psprofile.ps1")  {
         $psprof = $profile.currentuserallhosts; 
         $target = $psprof; 
     } else {
@@ -110,7 +110,7 @@ function LinkFile ([string]$tolink)
     { 
         $bakfile = "$($target).bak"; 
         echo "moving $target to $bakfile"; 
-        move $target $bakfile; 
+        mv $target $bakfile -force; 
     }
 
     if ($target.psiscontainer) 
