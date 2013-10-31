@@ -42,13 +42,13 @@ echo "cleaned up powershell psmodule default paths:"
 echo $env:psmodulepath
 
 # vim install on win32 can be a pain
-$vimpath = join-path $myhome ".vim"
-if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
-    $env:vimruntime += ";$($vimpath)"
-}
-[Environment]::SetEnvironmentVariable("vimruntime", $env:vimruntime, "User")
-echo "pointed vimruntime to userprofile:"
-echo $env:vimruntime
+#$vimpath = join-path $myhome ".vim"
+#if (-not $env:vimruntime -or ($env:vimruntime.split(";") -notcontains $vimpath)) {
+#    $env:vimruntime += ";$($vimpath)"
+#}
+#[Environment]::SetEnvironmentVariable("vimruntime", $env:vimruntime, "User")
+#echo "pointed vimruntime to userprofile:"
+#echo $env:vimruntime
 
 
 #
@@ -63,6 +63,8 @@ $source = join-path $pwd $tolink;
     {
         $xlappdata = "$env:appdata\Microsoft\Excel\XLSTART"; 
         $target = $xlappdata; 
+    } elseif ($tolink -eq "_vim")  {
+        $target = join-path $myhome "vimfiles"
     } elseif ($tolink -eq "_psprofile.ps1")  {
         $psprof = $profile.currentuserallhosts; 
         $target = $psprof; 
