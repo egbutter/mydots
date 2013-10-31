@@ -175,7 +175,7 @@ try
 # update all the submodules in .vim directory 
 #
 
-cd $vimpath
+cd (join-path $pwd "_vim")
 git submodule sync
 git submodule init
 git submodule update
