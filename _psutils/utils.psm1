@@ -1,5 +1,13 @@
-Function Send-Mail ([String] $FromEmailID, [String] $ToEmailID,[String] $Subject,[String] $Body, [String] $Smtpserver=$SMTPServer)
+Function Send-Mail 
 {
+    Param
+    (   
+        [String] $FromEmailID, 
+        [String] $ToEmailID, 
+        [String] $Subject, 
+        [String] $Body, 
+        [String] $Smtpserver
+    )
         $Msg  = New-Object Net.Mail.MailMessage
         $SMTP = New-Object Net.Mail.SmtpClient($SMTPServer) 
         $Msg.From = $FromEmailID
@@ -16,13 +24,13 @@ Function Execute-SQL
 
     Param
     (
-        [Object]  $SQLConnection,        #OPEN SQL Connection object
-        [String]  $SQL,                  #SQL Command
+        [Object]  $SQLConnection, 
+        [String]  $SQL, 
         [int]     $TimeOut=300
     )
     
-    $ErrorActionPreference="SilentlyContinue"
-[Object] $SQLHash=@{SQLErrMessage="";SQLResult="";SQLExitCode=0}
+    $ErrorActionPreference="SilentlyContinue" 
+    [Object] $SQLHash=@{SQLErrMessage="";SQLResult="";SQLExitCode=0}
     trap [Exception] 
     {
         $SQLHash.SQLErrMessage=($_.exception.message).ToString()
