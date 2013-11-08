@@ -8,13 +8,14 @@ Function Send-Mail
         [String] $Body, 
         [String] $Smtpserver
     )
-        $Msg  = New-Object Net.Mail.MailMessage
-        $SMTP = New-Object Net.Mail.SmtpClient($SMTPServer) 
-        $Msg.From = $FromEmailID
-        $Msg.To.Add($ToEmailID)
-        $Msg.Subject = $Subject
-        $Msg.Body = $Body
-        $SMTP.Send($msg)
+    $Msg  = New-Object Net.Mail.MailMessage
+    $SMTP = New-Object Net.Mail.SmtpClient($SMTPServer) 
+    $Msg.From = $FromEmailID
+    $Msg.To.Add($ToEmailID)
+    $Msg.Subject = $Subject
+    $Msg.Body = $Body
+    $SMTP.Send($msg)
+    echo "Email sent from $fromemailid to $toemailid"
 }
 
 
