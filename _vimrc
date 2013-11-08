@@ -44,6 +44,7 @@ au FileType python set omnifunc=pythoncomplete#Complete "tab completion
 let g:SuperTabDefaultCompletionType="context"
 set completeopt=menuone,longest,preview "python documentation on pw
 set runtimepath^=.vim/bundle/ctrlp.vim
+au BufRead,BufNewFile *.vb set filetype=vb
 
 if has("win32") 
   set shell=powershell
