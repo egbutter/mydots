@@ -16,8 +16,9 @@ set history=1000 "increase buffer history
 set number
 set wildmode=list:longest "bashlike file switch
 setlocal tabstop=4 "tab=4spaces
+setlocal softtabstop=4
 setlocal shiftwidth=4
-set expandtab
+set noexpandtab
 set autoindent
 set smartindent
 set ignorecase "ignore case in search unless capitalized
