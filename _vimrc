@@ -15,12 +15,12 @@ set ruler "line nums
 set history=1000 "increase buffer history
 set number
 set wildmode=list:longest "bashlike file switch
+set expandtab
 setlocal tabstop=4 "tab=4spaces
 setlocal softtabstop=4
 setlocal shiftwidth=4
-set noexpandtab
-set autoindent
-set smartindent
+set noautoindent
+set nosmartindent
 set ignorecase "ignore case in search unless capitalized
 set smartcase
 set hlsearch "highlight search
