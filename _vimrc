@@ -16,11 +16,13 @@ set history=1000 "increase buffer history
 set number
 set wildmode=list:longest "bashlike file switch
 set expandtab
+set autoindent  "must be turned on for set lisp
+set smartindent  "replaced by cindent
+set cindent
+set lisp
 setlocal tabstop=4 "tab=4spaces
-setlocal softtabstop=4
 setlocal shiftwidth=4
-set noautoindent
-set nosmartindent
+setlocal softtabstop=0
 set ignorecase "ignore case in search unless capitalized
 set smartcase
 set hlsearch "highlight search

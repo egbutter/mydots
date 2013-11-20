@@ -1,4 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_cnt =5
 let g:netrw_dirhist_1='/home/egbutter/Dropbox/documents/research/hedgedhog/README'
 let g:netrw_dirhist_2='C:/Users/ebutter.TENOR/sandbox/tenor/lib/tc/datacheck'
+let g:netrw_dirhist_3='C:/Users/ebutter.TENOR/sandbox/tenor/web/templates/ops/allocate'
+let g:netrw_dirhist_4='C:/Users/ebutter.TENOR/sandbox/tenor/web/templates/ops'
+let g:netrw_dirhist_5='C:\Users\ebutter.TENOR\sandbox\tenor\web\templates\ops'
