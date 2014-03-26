@@ -23,7 +23,7 @@ function grep
 
 function whosws 
 {
-    @(Get-WmiObject -ComputerName ws24 -credential (get-credential cliadmin@tenor.corp) -class win32_computersystem).UserName
+    @(Get-WmiObject -ComputerName $args[0] -credential (get-credential $args[1]) -class win32_computersystem).UserName
 }
 
 function tail
