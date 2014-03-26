@@ -21,6 +21,11 @@ function grep
     get-childitem $args[0] -include $args[1] -rec | select-string -pattern $args[2..-1]
 }
 
+function whosws 
+{
+    @(Get-WmiObject -ComputerName ws24 -credential (get-credential cliadmin@tenor.corp) -class win32_computersystem).UserName
+}
+
 function tail
 {
     get-content $args[0] -tail 30 -wait
