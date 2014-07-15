@@ -16,6 +16,11 @@ try {
 
 set-alias which get-command
 
+function read-pass 
+{
+    [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR((Read-Host 'What is your password?' -AsSecureString)))
+}
+
 function grep 
 {
     get-childitem $args[0] -include $args[1] -rec | select-string -pattern $args[2..-1]
