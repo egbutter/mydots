@@ -4,7 +4,6 @@ set-variable -name home -value $env:userprofile -force
 try {
     import-module psget
     import-module poshcode
-    import-module pscx
     import-module posh-hg
     import-module posh-git
     import-module find-string
