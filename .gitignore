@@ -39,3 +39,8 @@ Ankh.NoLoad
 _vim/.netrwhist
 
 _vim/bundle/*
+
+*.hi
+*.o
+*.errors
+_xmonad/xmonad-x86_64-linux
