@@ -1,15 +1,15 @@
-Function Send-Mail 
+Function Send-Mail
 {
     Param
-    (   
-        [String] $FromEmailID, 
-        [String] $ToEmailID, 
-        [String] $Subject, 
-        [String] $Body, 
+    (
+        [String] $FromEmailID,
+        [String] $ToEmailID,
+        [String] $Subject,
+        [String] $Body,
         [String] $Smtpserver
     )
     $Msg  = New-Object Net.Mail.MailMessage
-    $SMTP = New-Object Net.Mail.SmtpClient($SMTPServer) 
+    $SMTP = New-Object Net.Mail.SmtpClient($SMTPServer)
     $Msg.From = $FromEmailID
     $Msg.To.Add($ToEmailID)
     $Msg.Subject = $Subject
@@ -25,21 +25,21 @@ Function Execute-SQL
 
     Param
     (
-        [Object]  $SQLConnection, 
-        [String]  $SQL, 
+        [Object]  $SQLConnection,
+        [String]  $SQL,
         [int]     $TimeOut=300
     )
-    
-    $ErrorActionPreference="SilentlyContinue" 
+
+    $ErrorActionPreference="SilentlyContinue"
     [Object] $SQLHash=@{SQLErrMessage="";SQLResult="";SQLExitCode=0}
-    trap [Exception] 
+    trap [Exception]
     {
         $SQLHash.SQLErrMessage=($_.exception.message).ToString()
         $SQLHash.SQLResult=$rowoutput
         $SQLHash.SQLExitCode=-1
         if ($_.exception.message -match 'Exception calling "ExecuteReader" with "0"')
         {
-            Return $SQLHash            
+            Return $SQLHash
             Continue
         }
     }
@@ -72,11 +72,11 @@ Function Execute-SQL
         End-Script
     }
 
-    
-    if ($SQLConnection.state -ne "Open") 
+
+    if ($SQLConnection.state -ne "Open")
     {
         Write-Msg -ErrNumber 2 -Message "SQL Connection in $ScriptName is not Open. Cannot execute"
-        End-Script  
+        End-Script
     }
 
     $SQLCmd        = New-Object System.Data.SqlClient.SqlCommand
@@ -89,21 +89,21 @@ Function Execute-SQL
     {
         $SQLCmd.CommandTimeout = $TimeOut
     }
-    
+
     $SQLCmd.CommandTimeout = $TimeOut
     $SQLCmd.Connection  = $SqlConnection
     $SQLCmd.CommandText = $SQL
 
     #$SqlConnection.open() | Out-Null
 
-    $objReader= $SqlCmd.ExecuteReader() 
+    $objReader= $SqlCmd.ExecuteReader()
 
-    if ($?) 
+    if ($?)
     {
         while ($IsRecordsetavail -eq $True)
         {
-            while ($objReader.Read()) 
-            { 
+            while ($objReader.Read())
+            {
                $FieldMax=$ObjReader.FieldCount
                $FieldCount=0
                if ($ReadColNameFlag -eq 0)
@@ -114,15 +114,15 @@ Function Execute-SQL
                        $FieldCount = $FieldCount +1
                    }
 
-                   $ReadColNameFlag=1 
+                   $ReadColNameFlag=1
                    $FieldCount=0
-               
+
                    if($RowOutputTemp.SubString(0,1) -eq ",")
                    {
                        $RowOutputTemp=$RowOutputTemp.SubString(1,($RowOutputTemp.Length -1))
                    }
 
-                   $RowOutput=$RowOutput+$RowOutputTemp+"`n"    
+                   $RowOutput=$RowOutput+$RowOutputTemp+"`n"
                    $RowOutputTemp=""
                 }
 
@@ -132,19 +132,19 @@ Function Execute-SQL
                     $FieldCount = $FieldCount +1
                 }
                 $RowOutput=$RowOutput+$RowOutputTemp.SubString(1,($RowOutputTemp.Length -1))
-                $RowOutput=$RowOutput+"`n"    
+                $RowOutput=$RowOutput+"`n"
                 $RowOutputTemp=""
             }
             $IsRecordsetavail=$objReader.nextresult()
             $ReadColNameFlag =0
         }
 
-        $SQLHash.SQLErrMessage="None." 
+        $SQLHash.SQLErrMessage="None."
         $SQLHash.SQLResult=$rowoutput
         $SQLHash.SQLExitCode=0
         $ObjReader.Close()
     }
-    else 
+    else
     {
         $ERR=$error[0].exception
         $SQLHash.SQLErrMessage=$ERR.message
@@ -154,4 +154,20 @@ Function Execute-SQL
     Return $SQLHash
 }
 
+
+Function Enable-Remote
+{
+
+    Param
+    (
+        [String] $ws,
+        [String] $user,
+    )
+
+    Enable-RemotePsRemoting.ps1 $ws
+    Connect-WSMan -computername $ws -cred (Get-Credential $user)
+    Set-Item WSMan:\$ws\Client\TrustedHosts -value "$(get-item WSMan:\$ws\Client\TrustedHosts).value), $(gc env:computername)"
+    Restart-Service winrm
+    Write-Verbose "Added this computer to WSMan TrustedHosts on $ws"
+}
 
