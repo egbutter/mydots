@@ -12,12 +12,6 @@ try {
     echo "could not import all of our typical deps ... try running go.ps1 again!"
 }
 
-try {
-    import-module virtualenvwrapper -erroraction silentlycontinue
-} catch {
-    echo "could not import virtualenvwrapper, please install first"
-}
-
 set-alias which get-command
 
 function read-pass 
