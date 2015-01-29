@@ -137,6 +137,15 @@ install-module find-string -destination $psmdefault -EA silentlycontinue
 install-module psurl -destination $psmdefault -EA silentlycontinue
 install-module poshcode -destination $psmdefault -EA silentlycontinue
 
+if ($modules -notcontains "AWSPowerShell")
+{
+    echo "downloading aws powershell library"
+    $this_msi = "C:\this.msi"
+    (new-object Net.WebClient).DownloadFile("http://sdk-for-net.amazonwebservices.com/latest/AWSToolsAndSDKForNet.msi", $this_msi)
+    msiexec /qn /i $this_msi
+    rm $this_msi
+}
+
 #BROKEN: get-poshcode cmatrix -Destination $psmdefault
 # "error proxycred" https://getsatisfaction.com/poshcode/topics/error_with_get_poshcode
 
