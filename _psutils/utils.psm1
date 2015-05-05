@@ -161,7 +161,7 @@ Function Enable-Remote
     Param
     (
         [String] $ws,
-        [String] $user,
+        [String] $user
     )
 
     Enable-RemotePsRemoting.ps1 $ws
