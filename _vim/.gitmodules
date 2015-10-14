@@ -43,3 +43,6 @@
 [submodule "_vim/bundle/ctrlp"]
 	path = _vim/bundle/ctrlp
 	url = git@github.com:kien/ctrlp.vim.git
+[submodule "_vim/bundle/css"]
+	path = _vim/bundle/css
+	url = https://github.com/ap/vim-css-color.git
