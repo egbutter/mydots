@@ -16,10 +16,14 @@ alias rb=ruby
 alias ply=/home/egbutter/sandbox/Play20/play
 
 # load pybrew/rvm into a shell session "as a function"
-source /usr/local/bin/virtualenvwrapper.sh
 [[ -s "/home/egbutter/.rvm/scripts/rvm" ]] && source "/home/egbutter/.rvm/scripts/rvm"
 
 export PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/egbutter/.bashscripts:/home/egbutter/.rvm/bin:/home/egbutter/.local/bin:/home/egbutter/bin:/usr/local/heroku-client:/usr/local/osmosis-0.40.1/bin:/usr/local/osm2pgsql:/usr/local/MATLAB/R2011a/bin:/home/egbutter/sandbox/UbiGraph-alpha-0.2.4-Linux32-Fedora-9/bin
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
